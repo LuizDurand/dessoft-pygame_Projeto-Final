@@ -37,6 +37,10 @@ class Ninja(pygame.sprite.Sprite):
             self.rect.right = Width
         if self.rect.left < 0:
             self.rect.left = 0
+        if self.rect.top > Height:
+            self.rect.top = Height
+        if self.rect.bottom < 0:
+            self.rect.bottom = 0
 
 # dimensões do toco
 toco_WIDTH = 60
@@ -53,12 +57,23 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.rect.y = random.randint(-100, -toco_HEIGHT)
         self.speedx = random.randint(-3, 3)
         self.speedy = random.randint(2, 9)
+class alimento_cortado(pygame.sprite.Sprite):
+    def __init__(self,center,assets):
+        pygame.sprite.Sprite.__init__(self)
 
+        self.animacao_alimento = 
+        self.frame = 0
+        self.image = self.animacao_alimento
+
+def load_assets():
+    assets = {}
+    assets['BackgroundImage'] = pygame.image.laod
 
 BackgroundImage = pygame.image.load('ninja-village png.png').convert()
 BackgroundImage = pygame.transform.scale(BackgroundImage, (Width,Height))
 NinjaImage = pygame.image.load('ninja pixel.png').convert_alpha()
 NinjaImage = pygame.transform.scale(NinjaImage, (Ninja_Widht,Ninja_Height))
+Animacao_alimento = pygame.image.load('corte.png').convert
 
 pygame.display.set_caption('Fruit ninja boladão')
 icone = pygame.image.load('ninja pixel.png')
@@ -69,6 +84,8 @@ all_sprites = pygame.sprite.Group()
 Jogador = Ninja(NinjaImage)
 all_sprites.add(Jogador)
 
+#colisão jogador com alimento:
+colisao = pygame.sprite.spritecollide(Jogador, all_alimentos, True)
 #Ajuste de velocidade do jogo:
 FPS  = 30
 clock = pygame.time.Clock()
@@ -90,6 +107,7 @@ while game:
                 Jogador.speedy += 8
             if event.key == pygame.K_w:
                 Jogador.speedy -= 8
+                
     all_sprites.update()
     janela.fill((0,0,0))
     janela.blit(BackgroundImage,(0,0))
