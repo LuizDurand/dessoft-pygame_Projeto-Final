@@ -5,6 +5,9 @@ pygame.init()
 #Condições Iniciais
 vidas = 3
 high_score = []
+streak = 0
+frutas_perdidas = 0
+pontuacao = 0
 placar = 0
 Width = 900
 Height = 680
@@ -18,18 +21,55 @@ Preto = (0,0,0)
 Verde = (0,0,255)
 Amarelo = (255,255,0)
 
-#Criando o boneco:
+# dimensões do Ninja
 Ninja_Widht = 60
 Ninja_Height = 60
+
+# dimensões do toco
+toco_WIDTH = 60
+toco_HEIGHT = 60
+
+assets = {}
+assets['BackgroundImage'] = pygame.image.load('assets/img/ninja-village png.png').convert()
+assets['BackgroundImage'] = pygame.transform.scale(assets['BackgroundImage'], (Width,Height))
+assets['NinjaImage'] = pygame.image.load('assets/img/Ninja_Tramontina.png').convert_alpha()
+assets['NinjaImage'] = pygame.transform.scale(assets['NinjaImage'], (Ninja_Widht,Ninja_Height))
+assets['Tocoimage'] = pygame.image.load('assets/img/toco.png').convert_alpha()
+assets['Tocoimage'] = pygame.transform.scale(assets['Tocoimage'], (toco_WIDTH, toco_HEIGHT))
+
+Animacao_alimento = []
+for i in range[7]:
+    filename = 'assets/img/corte0{}.png'.format(i)
+    img = pygame.image.load(filename).convert()
+    img = pygame.transform.scale(img, (60,60))
+    Animacao_alimento.append(img)
+assets["Animacao_alimento"] = Animacao_alimento
+
+Ninjas = []
+for e in range[]:
+    filesname = 'assets/img/Ninja0{}.png'.format(e)
+    img = pygame.image.load(filesname).convert()
+    img = pygame.transform.scale(img, (60,60))
+    Ninjas.append(img)
+assets["Ninjas"] = Ninjas
+                       
+pygame.display.set_caption('Fruit ninja boladão')
+icone = pygame.image.load('ninja pixel.png')
+pygame.display.set_icon(icone)
+
+#Criando o boneco:
 class Ninja(pygame.sprite.Sprite):
-    def __init__(self,img):
+    def __init__(self,assets):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img 
+        self.image = assets['NinjaImage']
         self.rect = self.image.get_rect()
         self.rect.centerx = Width / 2
         self.rect.bottom = Height -10
         self.speedx = 0
         self.speedy = 0
+        self.groups = groups
+        self.assets = assets
+        
     def update(self): 
         self.rect.x = self.speedx
         self.rect.y = self.speedy
@@ -41,15 +81,32 @@ class Ninja(pygame.sprite.Sprite):
             self.rect.top = Height
         if self.rect.bottom < 0:
             self.rect.bottom = 0
+        
+def combos(combos):
+    combo_1 = 5
+    combo_2 = 10
+    combo_3 = 15
+    combo_4 = 20
+    combo_5 = 25
+
+    if streak >= 10:
+        pontuacao_alimento = pontuacao * combo_1
+    if streak >= 20:
+        pontuacao_alimento = pontuacao * combo_2
+    if streak >= 30:
+        pontuacao_alimento = pontuacao * combo_3
+    if streak >= 40:
+        pontuacao_alimento = pontuacao * combo_4
+    if streak >= 50:
+        pontuacao_alimento = pontuacao * combo_5
+
+    return pontuacao_alimento
             
 #Criando classe para os alimentos:          
-class alimentos(pygame.sprite.Sprite):
-    def __init__(self,img):
+class Inimigos(pygame.sprite.Sprite):
+    def __init__(self,assets):
         pygame.sprite.Sprite.__init__(self)
-
-# dimensões do toco
-toco_WIDTH = 60
-toco_HEIGHT = 60
+        self.image = assets
 
 # criando classe do toco
 class toco_de_madeira(pygame.sprite.Sprite):
@@ -62,6 +119,15 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.speedx = random.randint(-3, 3)
         self.speedy = random.randint(2, 9)
 
+        def update(self):
+            self.rect.x += self.speedx
+            self.rect.y += self.speedy
+            if self.rect.top > Height or self.rect.right < 0 or self.rect.left > Width:
+                self.rect.x = random.randint(0, toco_WIDTH)
+                self.rect.y = random.randint(-100, toco_HEIGHT)
+                self.speedx = random.randint(-3, 3)
+                self.speedy = random.randint(2, 9)
+
 # Animacao do alimento cortado:
 Animacao_Width = 60
 Animacao_Height = 60
@@ -70,7 +136,7 @@ class alimento_cortado(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.Animacao_alimento = assets['Animacao_alimento']
         self.frame = 0
-        self.image = self.animacao_alimento[self.frame]
+        self.image = self.Animacao_alimento[self.frame]
         self.rect = self.image.get_rect 
         self.rect.center = center 
         self.last_update = pygame.time.get_ticks()
@@ -81,7 +147,7 @@ class alimento_cortado(pygame.sprite.Sprite):
         if elapsed_ticks > self.frame_ticks:
             self.last_update = now
             self.frmae += 1
-            if self.frame = len(self.Animacao_alimento):
+            if self.frame == len(self.Animacao_alimento):
                 self.kill()
             else: center = self.rect.center
             self.image = self.Animacao_alimento[self.frame]
@@ -89,39 +155,7 @@ class alimento_cortado(pygame.sprite.Sprite):
             self.rect.center = center
         
 
-assets = {}
-assets['BackgroundImage'] = pygame.image.load('assets/img/ninja-village png.png').convert()
-assets['BackgroundImage'] = pygame.transform.scale(assets['BackgroundImage'], (Width,Height))
-assets['NinjaImage'] = pygame.image.load('assets/img/Ninja_Tramontina.png').convert_alpha()
-assets['NinjaImage'] = pygame.transform.scale(assets['NinjaImage'], (Ninja_Widht,Ninja_Height))
 
-
-BackgroundImage = pygame.image.load('ninja-village png.png').convert()
-BackgroundImage = pygame.transform.scale(BackgroundImage, (Width,Height))
-
-NinjaImage = pygame.image.load('Ninja_Tramontina.png').convert_alpha()
-NinjaImage = pygame.transform.scale(NinjaImage, (Ninja_Widht,Ninja_Height))
-
-Animacao_alimento = pygame.image.load('corte.png').convert
-Animacao_alimento = pygame.transform.scale(Animacao_alimento, (Animacao_Width, Animacao_Height))
-
-Animacao_alimento = []
-for i in range[9]:
-    filename = 'assets/img/corte0{}.png'.format(i))
-    img = pygame.image.load(filename).convert()
-    img = pygame.transform.scale(img, (60,60))
-    Animacao_alimento.append(img)
-assets["Animacao_alimento"] = Animacao_alimento
-
-                       
-pygame.display.set_caption('Fruit ninja boladão')
-icone = pygame.image.load('ninja pixel.png')
-pygame.display.set_icon(icone)
-
-#Criando o jogador:
-all_sprites = pygame.sprite.Group()
-Jogador = Ninja(NinjaImage)
-all_sprites.add(Jogador)
 
 #Ajuste de velocidade do jogo:
 FPS  = 30
@@ -130,9 +164,15 @@ clock = pygame.time.Clock()
 #Criação dos Grupos:
 all_sprites = pygame.sprite.Group()
 all_alimentos = pygame.sprite.Group()
+
 groups = {}
 groups['all_sprites'] = all_sprites
 groups['all_alimentos'] = all_alimentos
+
+#Criando o jogador:
+all_sprites = pygame.sprite.Group()
+Jogador = Ninja(groups,assets)
+all_sprites.add(Jogador)
 
 #Loop Principal:
 
@@ -171,8 +211,10 @@ while game:
     for alimento in colisao:
         
     janela.fill((0,0,0))
-    janela.blit(BackgroundImage,(0,0))
+    janela.blit(assets['BackgroundImage'] ,(0,0))
     all_sprites.draw(janela)
     pygame.display.update()
-   
+    
+
+#Função que termina o pygame    
 pygame.quit()
