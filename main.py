@@ -124,7 +124,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
             self.rect.y += self.speedy
             if self.rect.top > Height or self.rect.right < 0 or self.rect.left > Width:
                 self.rect.x = random.randint(0, toco_WIDTH)
-                self.rect.y = random.randint(-100, toco_HEIGHT)
+                self.rect.y = random.randint(-100, toco_HEIGHT) #se o recty > que a janela ele começa de baixo
                 self.speedx = random.randint(-3, 3)
                 self.speedy = random.randint(2, 9)
 
