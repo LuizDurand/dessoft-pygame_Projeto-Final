@@ -218,3 +218,4 @@ while game:
 
 #Função que termina o pygame    
 pygame.quit()
+
