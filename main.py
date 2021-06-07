@@ -1,5 +1,6 @@
 import pygame
 import random
+import time 
 pygame.init()
 
 #Condições Iniciais
@@ -13,13 +14,9 @@ Width = 900
 Height = 680
 janela = pygame.display.set_mode((Width,Height))
 
-# Cores
-Branco = (255,255,255)
-Vermelho = (255,0,0)
-Azul = (0,0,255)
-Preto = (0,0,0)
-Verde = (0,0,255)
-Amarelo = (255,255,0)
+#Criando efeito de gravidade para os inimigos e o jogador:
+g = 2
+
 
 # dimensões do Ninja
 Ninja_Widht = 60
@@ -46,7 +43,7 @@ for i in range[7]:
 assets["Animacao_alimento"] = Animacao_alimento
 
 Ninjas = []
-for e in range[]:
+for e in range[5]:
     filesname = 'assets/img/Ninja0{}.png'.format(e)
     img = pygame.image.load(filesname).convert()
     img = pygame.transform.scale(img, (60,60))
@@ -101,12 +98,24 @@ def combos(combos):
         pontuacao_alimento = pontuacao * combo_5
 
     return pontuacao_alimento
-            
-#Criando classe para os alimentos:          
+
+#Criando classe para os inimigos:          
 class Inimigos(pygame.sprite.Sprite):
     def __init__(self,assets):
         pygame.sprite.Sprite.__init__(self)
-        self.image = assets
+        self.image = random.choice(assets['Ninjas'])
+        self.image = pygame.transform.scale(self.image, (Ninja_Widht, Ninja_Height))
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randint(0, Width)
+        self.rect.y = 681
+        self.speedx = random.randint(-3, 3)
+        self.speedy = random.randint(-15, -25)
+
+    def update(self):
+        self.rect.x += self.speedx
+        self.speedy += g
+        self.rect.y += self.speedy
+
 
 # criando classe do toco
 class toco_de_madeira(pygame.sprite.Sprite):
@@ -114,21 +123,17 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.image = pygame.image.load('toco.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (toco_WIDTH, toco_HEIGHT))
         self.rect = self.image.get_rect()
-        self.rect.x = random.randint(0, toco_WIDTH)
-        self.rect.y = random.randint(-100, toco_HEIGHT)
+        self.rect.x = random.randint(0, Width)
+        self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(2, 9)
+        self.speedy = random.randint(-15, -25)
 
-        def update(self):
-            self.rect.x += self.speedx
-            self.rect.y += self.speedy
-            if self.rect.top > Height or self.rect.right < 0 or self.rect.left > Width:
-                self.rect.x = random.randint(0, toco_WIDTH)
-                self.rect.y = random.randint(-100, toco_HEIGHT) #se o recty > que a janela ele começa de baixo
-                self.speedx = random.randint(-3, 3)
-                self.speedy = random.randint(2, 9)
+    def update(self):
+        self.rect.x += self.speedx
+        self.speedy += g
+        self.rect.y += self.speedy
 
-# Animacao do alimento cortado:
+# Animacao do corte:
 Animacao_Width = 60
 Animacao_Height = 60
 class alimento_cortado(pygame.sprite.Sprite):
@@ -141,6 +146,7 @@ class alimento_cortado(pygame.sprite.Sprite):
         self.rect.center = center 
         self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 50
+
     def update(self):
         now = pygame.time.get_ticks()
         elapsed_ticks = now = self.last_update
@@ -164,10 +170,12 @@ clock = pygame.time.Clock()
 #Criação dos Grupos:
 all_sprites = pygame.sprite.Group()
 all_inimigos = pygame.sprite.Group()
+all_tocos = pygame.sprite.Group()
 
 groups = {}
 groups['all_sprites'] = all_sprites
 groups['all_inimigos'] = all_inimigos
+groups['all_tocos'] = all_tocos
 
 #Criando o jogador:
 all_sprites = pygame.sprite.Group()
@@ -208,10 +216,24 @@ while game:
                 
     all_sprites.update()
     colisao = pygame.sprite.groupcollide(all_inimigos, Jogador,True,True)
-    for Inimigos in colisao:
-        m = Ninjas("Ninjas")
-        all_sprites.add(m)
-        all_inimigos.add(m)
+    for Ninjas in colisao:
+        n = Inimigos(assets)
+        all_sprites.add(n)
+        all_inimigos.add(n) 
+        animacao_corte = Animacao_alimento(Inimigos.rect.center, assets)
+        all_sprites.add(animacao_corte)
+        pontuacao  += 100
+    
+    colisao_com_tronco = pygame.sprite.groupcollide(Jogador, all_tocos,True,True)
+    for Toco_De_Madeira in colisao_com_tronco:
+        u = Toco_De_Madeira(assets)
+        all_sprites.add(u)
+        all_tocos.add(u)
+    if len(colisao_com_tronco) > 0:
+        vidas -= 1
+        Jogador.kill()
+
+    
 
     
         
