@@ -17,7 +17,6 @@ janela = pygame.display.set_mode((Width,Height))
 #Criando efeito de gravidade para os inimigos e o jogador:
 g = 2
 
-
 # dimensões do Ninja
 Ninja_Widht = 60
 Ninja_Height = 60
@@ -35,28 +34,28 @@ assets['Tocoimage'] = pygame.image.load('toquinho.png').convert_alpha()
 assets['Tocoimage'] = pygame.transform.scale(assets['Tocoimage'], (toco_WIDTH, toco_HEIGHT))
 
 Animacao_alimento = []
-for i in range[7]:
-    filename = 'corte0{}.png'.format(i)
+for i in range(6):
+    filename = 'Corte0{}.png'.format(i)
     img = pygame.image.load(filename).convert()
     img = pygame.transform.scale(img, (60,60))
     Animacao_alimento.append(img)
 assets["Animacao_alimento"] = Animacao_alimento
 
 Ninjas = []
-for e in range[5]:
+for e in range(5):
     filesname = 'Ninja0{}.png'.format(e)
     img = pygame.image.load(filesname).convert()
     img = pygame.transform.scale(img, (60,60))
     Ninjas.append(img)
 assets["Ninjas"] = Ninjas
                        
-pygame.display.set_caption('Fruit ninja boladão')
+pygame.display.set_caption('Ninja v Ninja')
 icone = pygame.image.load('ninja pixel.png')
 pygame.display.set_icon(icone)
 
 #Criando o boneco:
 class Ninja(pygame.sprite.Sprite):
-    def __init__(self,assets):
+    def __init__(self,groups,assets):
         pygame.sprite.Sprite.__init__(self)
         self.image = assets['NinjaImage']
         self.rect = self.image.get_rect()
@@ -115,6 +114,11 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.speedy += g
         self.rect.y += self.speedy
+        if self.rect.top > Height or self.rect.right < 0 or self.rect.left > Width:
+            self.rect.x = random.randint(0, Width)
+            self.rect.y = 681
+            self.speedx = random.randint(-3, 3)
+            self.speedy = random.randint(-15, -25)
 
 
 # criando classe do toco
@@ -132,6 +136,12 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.speedy += g
         self.rect.y += self.speedy
+        if self.rect.top > Height or self.rect.right < 0 or self.rect.left > Width:
+            self.rect.x = random.randint(0, Width)
+            self.rect.y = 681
+            self.speedx = random.randint(-3, 3)
+            self.speedy = random.randint(-15, -25)
+
 
 # Animacao do corte:
 Animacao_Width = 60
@@ -183,7 +193,7 @@ Jogador = Ninja(groups,assets)
 all_sprites.add(Jogador)
 
 #Loop Principal:
-
+move_left = Jogador.speedy = Jogador.speedy + 12
 game = True
 while game:
     clock.tick(FPS)
@@ -193,8 +203,6 @@ while game:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 move_left = True
-            if move_left == True:
-                Jogador.speedx -= 12
             if event.key == pygame.K_d:
                 move_right = True
             if move_right == True:
@@ -224,7 +232,7 @@ while game:
         all_sprites.add(animacao_corte)
         pontuacao  += 100
     
-    colisao_com_tronco = pygame.sprite.groupcollide(Jogador, all_tocos,True,True)
+    colisao_com_tronco = pygame.sprite.spritecollide(Jogador, all_tocos,True,True)
     for Toco_De_Madeira in colisao_com_tronco:
         u = Toco_De_Madeira(assets)
         all_sprites.add(u)
