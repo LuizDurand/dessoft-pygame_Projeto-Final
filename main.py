@@ -27,16 +27,16 @@ toco_WIDTH = 60
 toco_HEIGHT = 60
 
 assets = {}
-assets['BackgroundImage'] = pygame.image.load('assets/img/ninja-village png.png').convert()
+assets['BackgroundImage'] = pygame.image.load('ninja-village png.png').convert()
 assets['BackgroundImage'] = pygame.transform.scale(assets['BackgroundImage'], (Width,Height))
-assets['NinjaImage'] = pygame.image.load('assets/img/Ninja_Tramontina.png').convert_alpha()
+assets['NinjaImage'] = pygame.image.load('ninja pixel.png').convert_alpha()
 assets['NinjaImage'] = pygame.transform.scale(assets['NinjaImage'], (Ninja_Widht,Ninja_Height))
-assets['Tocoimage'] = pygame.image.load('assets/img/toco.png').convert_alpha()
+assets['Tocoimage'] = pygame.image.load('toquinho.png').convert_alpha()
 assets['Tocoimage'] = pygame.transform.scale(assets['Tocoimage'], (toco_WIDTH, toco_HEIGHT))
 
 Animacao_alimento = []
 for i in range[7]:
-    filename = 'assets/img/corte0{}.png'.format(i)
+    filename = 'corte0{}.png'.format(i)
     img = pygame.image.load(filename).convert()
     img = pygame.transform.scale(img, (60,60))
     Animacao_alimento.append(img)
@@ -44,7 +44,7 @@ assets["Animacao_alimento"] = Animacao_alimento
 
 Ninjas = []
 for e in range[5]:
-    filesname = 'assets/img/Ninja0{}.png'.format(e)
+    filesname = 'Ninja0{}.png'.format(e)
     img = pygame.image.load(filesname).convert()
     img = pygame.transform.scale(img, (60,60))
     Ninjas.append(img)
@@ -120,7 +120,7 @@ class Inimigos(pygame.sprite.Sprite):
 # criando classe do toco
 class toco_de_madeira(pygame.sprite.Sprite):
     def __init__(self):
-        self.image = pygame.image.load('toco.png').convert_alpha()
+        self.image = assets['Tocoimage']
         self.image = pygame.transform.scale(self.image, (toco_WIDTH, toco_HEIGHT))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, Width)
