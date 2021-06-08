@@ -33,7 +33,7 @@ assets['NinjaImage'] = pygame.transform.scale(assets['NinjaImage'], (Ninja_Widht
 assets['Tocoimage'] = pygame.image.load('toquinho.png').convert_alpha()
 assets['Tocoimage'] = pygame.transform.scale(assets['Tocoimage'], (toco_WIDTH, toco_HEIGHT))
 pygame.font.init()
-assets['Fonte_Placar'] = pygame.font.Font('.ttf', 28)
+assets['Fonte_Placar'] = pygame.font.Font(None, 28)
 
 Animacao_alimento = []
 for i in range(6):
@@ -69,8 +69,8 @@ class Ninja(pygame.sprite.Sprite):
         self.assets = assets
 
     def update(self): 
-        self.rect.x = self.speedx
-        self.rect.y = self.speedy
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
         if self.rect.right > Width:
             self.rect.right = Width
         if self.rect.left < 0:
@@ -80,25 +80,7 @@ class Ninja(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.rect.bottom = 0
         
-def combos(combos):
-    combo_1 = 5
-    combo_2 = 10
-    combo_3 = 15
-    combo_4 = 20
-    combo_5 = 25
 
-    if streak >= 10:
-        pontuacao_alimento = pontuacao * combo_1
-    if streak >= 20:
-        pontuacao_alimento = pontuacao * combo_2
-    if streak >= 30:
-        pontuacao_alimento = pontuacao * combo_3
-    if streak >= 40:
-        pontuacao_alimento = pontuacao * combo_4
-    if streak >= 50:
-        pontuacao_alimento = pontuacao * combo_5
-
-    return pontuacao_alimento
 
 #Criando classe para os inimigos:          
 class Inimigos(pygame.sprite.Sprite):
@@ -110,7 +92,7 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(-15, -25)
+        self.speedy = random.randint(-50, -30)
 
     def update(self):
         self.rect.x += self.speedx
@@ -120,7 +102,7 @@ class Inimigos(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-15, -25)
+            self.speedy = random.randint(-25, -15)
 
 
 # criando classe do toco
@@ -142,7 +124,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-15, -25)
+            self.speedy = random.randint(-50, -30)
 
 
 # Animacao do corte:
@@ -154,7 +136,7 @@ class alimento_cortado(pygame.sprite.Sprite):
         self.Animacao_alimento = assets['Animacao_alimento']
         self.frame = 0
         self.image = self.Animacao_alimento[self.frame]
-        self.rect = self.image.get_rect 
+        self.rect = self.image.get_rect() 
         self.rect.center = center 
         self.last_update = pygame.time.get_ticks()
         self.frame_ticks = 50
@@ -164,13 +146,14 @@ class alimento_cortado(pygame.sprite.Sprite):
         elapsed_ticks = now = self.last_update
         if elapsed_ticks > self.frame_ticks:
             self.last_update = now
-            self.frmae += 1
+            self.frame += 1
             if self.frame == len(self.Animacao_alimento):
                 self.kill()
-            else: center = self.rect.center
-            self.image = self.Animacao_alimento[self.frame]
-            self.rect = self.image.get_rect()
-            self.rect.center = center
+            else: 
+                center = self.rect.center
+                self.image = self.Animacao_alimento[self.frame]
+                self.rect = self.image.get_rect()
+                self.rect.center = center
         
 
 
@@ -195,7 +178,7 @@ Jogador = Ninja(groups,assets)
 all_sprites.add(Jogador)
 
 #Criando Inimigos:
-for i in range(5):
+for i in range(2):
     ninjas = Inimigos(assets)
     all_sprites.add(ninjas)
     all_inimigos.add(ninjas)
@@ -215,9 +198,9 @@ while game:
             game = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                move_left = True
+                Jogador.speedx -= 12
             if event.key == pygame.K_d:
-                move_right = True
+                Jogador.speedx += 12
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
                 move_down = True
@@ -230,14 +213,13 @@ while game:
                 move_right == False
                 
     all_sprites.update()
-    colisao = pygame.sprite.groupcollide(all_inimigos, Jogador,True,True)
+    colisao = pygame.sprite.spritecollide(Jogador, all_inimigos,True)
     for Ninjas in colisao:
         n = Inimigos(assets)
         all_sprites.add(n)
         all_inimigos.add(n) 
-        animacao_corte = Animacao_alimento(Inimigos.rect.center, assets)
-        all_sprites.add(animacao_corte)
-        pontuacao  += 100
+        # animacao_corte = alimento_cortado(n.rect.center, assets)
+        # all_sprites.add(animacao_corte)
         streak += 1
         if streak > 5 and streak <= 10:
             pontuacao += 150
@@ -251,7 +233,7 @@ while game:
             pontuacao += 100
 
 
-    colisao_com_tronco = pygame.sprite.spritecollide(Jogador, all_tocos,True,True)
+    colisao_com_tronco = pygame.sprite.spritecollide(Jogador, all_tocos,True)
     for Toco_De_Madeira in colisao_com_tronco:
         u = Toco_De_Madeira(assets)
         all_sprites.add(u)
