@@ -92,11 +92,7 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-<<<<<<< HEAD
         self.speedy = random.randint(-50, -30)
-=======
-        self.speedy = random.randint(-25, -15)
->>>>>>> 44a7f3caaa1942f368baaa51ec2a13abd0f6b4e5
 
     def update(self):
         self.rect.x += self.speedx
@@ -118,7 +114,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(-25, -15)
+        self.speedy = random.randint(-15, -25)
 
     def update(self):
         self.rect.x += self.speedx
@@ -128,11 +124,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-<<<<<<< HEAD
             self.speedy = random.randint(-50, -30)
-=======
-            self.speedy = random.randint(-25, -15)
->>>>>>> 44a7f3caaa1942f368baaa51ec2a13abd0f6b4e5
 
 
 # Animacao do corte:
@@ -193,11 +185,6 @@ for i in range(2):
 
 #Loop Principal:
 
-move_left = Jogador.speedx = Jogador.speedx - 12
-move_right = Jogador.speedx = Jogador.speedx + 12
-move_down = Jogador.speedy = Jogador.speedy + 12
-move_up = Jogador.speedy = Jogador.speedy - 12
-
 game = True
 while game:
     clock.tick(FPS)
@@ -252,29 +239,6 @@ while game:
 
     if vidas == 0:
         game = False
-
-
-    janela.fill((0,0,0))
-    janela.blit(assets['BackgroundImage'] ,(0,0))
-    all_sprites.draw(janela)
-    
-
-    #Desenha o placar:
-    text_surface = assets['Fonte_Placar'].render("{:08d}".format(pontuacao), True, (255,255,0))
-    text_rect = text_surface.get_rect()
-    text_rect.midtop = (Width / 2, 10)
-    janela.blit(text_surface,text_rect)
-
-    #Desenha as vidas:
-    text_surface = assets['Fonte_Placar'].render(chr(9829) * vidas, True, (255, 0, 0))
-    text_rect = text_surface.get_rect()
-    text_rect.bottomleft = (10, Height - 10)
-    janela.blit(text_surface, text_rect)
-    pygame.display.update()
-    clock.tick(FPS)
-    
-#Função que termina o pygame    
-pygame.quit()
 
 
     janela.fill((0,0,0))
