@@ -258,7 +258,7 @@ while game:
     text_rect.bottomleft = (10, Height - 10)
     janela.blit(text_surface, text_rect)
     pygame.display.update()
-
+    clock.tick(FPS)
     
 
 #Função que termina o pygame    
