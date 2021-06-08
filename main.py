@@ -32,6 +32,8 @@ assets['NinjaImage'] = pygame.image.load('ninja pixel.png').convert_alpha()
 assets['NinjaImage'] = pygame.transform.scale(assets['NinjaImage'], (Ninja_Widht,Ninja_Height))
 assets['Tocoimage'] = pygame.image.load('toquinho.png').convert_alpha()
 assets['Tocoimage'] = pygame.transform.scale(assets['Tocoimage'], (toco_WIDTH, toco_HEIGHT))
+pygame.font.init()
+assets['Fonte_Placar'] = pygame.font.Font('.ttf', 28)
 
 Animacao_alimento = []
 for i in range(6):
@@ -65,7 +67,7 @@ class Ninja(pygame.sprite.Sprite):
         self.speedy = 0
         self.groups = groups
         self.assets = assets
-        
+
     def update(self): 
         self.rect.x = self.speedx
         self.rect.y = self.speedy
@@ -192,8 +194,19 @@ all_sprites = pygame.sprite.Group()
 Jogador = Ninja(groups,assets)
 all_sprites.add(Jogador)
 
+#Criando Inimigos:
+for i in range(5):
+    ninjas = Inimigos(assets)
+    all_sprites.add(ninjas)
+    all_inimigos.add(ninjas)
+
 #Loop Principal:
-move_left = Jogador.speedy = Jogador.speedy + 12
+
+move_left = Jogador.speedx = Jogador.speedx - 12
+move_right = Jogador.speedx = Jogador.speedx + 12
+move_down = Jogador.speedy = Jogador.speedy + 12
+move_up = Jogador.speedy = Jogador.speedy - 12
+
 game = True
 while game:
     clock.tick(FPS)
@@ -205,17 +218,11 @@ while game:
                 move_left = True
             if event.key == pygame.K_d:
                 move_right = True
-            if move_right == True:
-                Jogador.speedx += 12
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
                 move_down = True
-            if move_down == True:
-                Jogador.speedy += 12
             if event.key == pygame.K_w:
                 move_up = True
-            if move_up == True:
-                Jogador.speedy -= 12
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
                 move_left = False
@@ -241,14 +248,28 @@ while game:
         vidas -= 1
         Jogador.kill()
 
-    
+    if vidas == 0:
+        game = False
 
-    
-        
+
     janela.fill((0,0,0))
     janela.blit(assets['BackgroundImage'] ,(0,0))
     all_sprites.draw(janela)
+    
+
+    #Desenha o placar:
+    text_surface = assets['Fonte_Placar'].render("{:08d}".format(pontuacao), True, (255,255,0))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (Width / 2, 10)
+    janela.blit(text_surface,text_rect)
+
+    #Desenha as vidas:
+    text_surface = assets['Fonte_Placar'].render(chr(9829) * vidas, True, (255, 0, 0))
+    text_rect = text_surface.get_rect()
+    text_rect.bottomleft = (10, Height - 10)
+    janela.blit(text_surface, text_rect)
     pygame.display.update()
+
     
 
 #Função que termina o pygame    
