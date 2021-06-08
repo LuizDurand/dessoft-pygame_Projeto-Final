@@ -238,7 +238,19 @@ while game:
         animacao_corte = Animacao_alimento(Inimigos.rect.center, assets)
         all_sprites.add(animacao_corte)
         pontuacao  += 100
-    
+        streak += 1
+        if streak > 5 and streak <= 10:
+            pontuacao += 150
+        if streak > 10 and streak <= 15:
+            pontuacao += 200
+        if streak > 15 and streak <= 20:
+            pontuacao += 250
+        if streak > 20:
+            pontuacao += 300
+        else: 
+            pontuacao += 100
+
+
     colisao_com_tronco = pygame.sprite.spritecollide(Jogador, all_tocos,True,True)
     for Toco_De_Madeira in colisao_com_tronco:
         u = Toco_De_Madeira(assets)
