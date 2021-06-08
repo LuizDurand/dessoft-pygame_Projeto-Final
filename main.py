@@ -268,3 +268,27 @@ while game:
 
 #Função que termina o pygame    
 pygame.quit()
+
+
+    janela.fill((0,0,0))
+    janela.blit(assets['BackgroundImage'] ,(0,0))
+    all_sprites.draw(janela)
+    
+
+    #Desenha o placar:
+    text_surface = assets['Fonte_Placar'].render("{:08d}".format(pontuacao), True, (255,255,0))
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (Width / 2, 10)
+    janela.blit(text_surface,text_rect)
+
+    #Desenha as vidas:
+    text_surface = assets['Fonte_Placar'].render(chr(9829) * vidas, True, (255, 0, 0))
+    text_rect = text_surface.get_rect()
+    text_rect.bottomleft = (10, Height - 10)
+    janela.blit(text_surface, text_rect)
+    pygame.display.update()
+
+    
+
+#Função que termina o pygame    
+pygame.quit()
