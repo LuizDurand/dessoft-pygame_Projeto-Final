@@ -110,7 +110,7 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(-15, -25)
+        self.speedy = random.randint(-25, -15)
 
     def update(self):
         self.rect.x += self.speedx
@@ -120,7 +120,7 @@ class Inimigos(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-15, -25)
+            self.speedy = random.randint(-25, -15)
 
 
 # criando classe do toco
@@ -132,7 +132,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(-15, -25)
+        self.speedy = random.randint(-25, -15)
 
     def update(self):
         self.rect.x += self.speedx
@@ -142,7 +142,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-15, -25)
+            self.speedy = random.randint(-25, -15)
 
 
 # Animacao do corte:
@@ -281,8 +281,7 @@ while game:
     text_rect.bottomleft = (10, Height - 10)
     janela.blit(text_surface, text_rect)
     pygame.display.update()
-
+    clock.tick(FPS)
     
-
 #Função que termina o pygame    
 pygame.quit()
