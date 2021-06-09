@@ -51,7 +51,7 @@ assets["Animacao_alimento"] = Animacao_alimento
 # armazena todas as imagens dos inimigos dentro da lista ninjas 
 Ninjas = []
 for e in range(5):
-    filesname = 'Ninja0{}.png'.format(e)
+    filesname = 'ninjja0{}.png'.format(e)
     img = pygame.image.load(filesname).convert_alpha()
     img = pygame.transform.scale(img, (60,60))
     Ninjas.append(img)
@@ -64,7 +64,7 @@ pygame.display.set_icon(icone)
 
 #Carrega os sons do jogo:
 pygame.mixer.music.load('DojoMusic.mp3')
-pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.set_volume(0.2)
 assets['cut_sound'] = pygame.mixer.Sound('cutsound.mp3')
 
 #Criando o boneco:
