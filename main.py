@@ -184,7 +184,6 @@ for i in range(2):
     all_inimigos.add(ninjas)
 
 #Loop Principal:
-
 game = True
 while game:
     clock.tick(FPS)
@@ -263,8 +262,8 @@ while game:
     text_rect.bottomleft = (10, Height - 10)
     janela.blit(text_surface, text_rect)
     pygame.display.update()
-    clock.tick(FPS)
+
     
 
-#Função que termina o pygame    
+#Função que termina o pygame:    
 pygame.quit()
