@@ -38,7 +38,7 @@ assets['Fonte_Placar'] = pygame.font.Font(None, 28)
 Animacao_alimento = []
 for i in range(6):
     filename = 'Corte0{}.png'.format(i)
-    img = pygame.image.load(filename).convert()
+    img = pygame.image.load(filename).convert_alpha()
     img = pygame.transform.scale(img, (60,60))
     Animacao_alimento.append(img)
 assets["Animacao_alimento"] = Animacao_alimento
@@ -46,7 +46,7 @@ assets["Animacao_alimento"] = Animacao_alimento
 Ninjas = []
 for e in range(5):
     filesname = 'Ninja0{}.png'.format(e)
-    img = pygame.image.load(filesname).convert()
+    img = pygame.image.load(filesname).convert_alpha()
     img = pygame.transform.scale(img, (60,60))
     Ninjas.append(img)
 assets["Ninjas"] = Ninjas
