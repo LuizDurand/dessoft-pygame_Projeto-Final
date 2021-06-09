@@ -92,7 +92,7 @@ class Inimigos(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, Width)
         self.rect.y = 681
         self.speedx = random.randint(-3, 3)
-        self.speedy = random.randint(-50, -30)
+        self.speedy = random.randint(-50, -42)
 
     def update(self):
         self.rect.x += self.speedx
@@ -102,7 +102,7 @@ class Inimigos(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-25, -15)
+            self.speedy = random.randint(-50, -42)
 
 
 # criando classe do toco
@@ -124,7 +124,7 @@ class toco_de_madeira(pygame.sprite.Sprite):
             self.rect.x = random.randint(0, Width)
             self.rect.y = 681
             self.speedx = random.randint(-3, 3)
-            self.speedy = random.randint(-50, -30)
+            self.speedy = random.randint(-50, -42)
 
 
 # Animacao do corte:
@@ -193,19 +193,24 @@ while game:
             game = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                Jogador.speedx -= 12
+                Jogador.speedx -= 23
             if event.key == pygame.K_d:
-                Jogador.speedx += 12
+                Jogador.speedx += 23
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
-                move_down = True
+                Jogador.speedy += 23
             if event.key == pygame.K_w:
-                move_up = True
+                Jogador.speedy -= 23
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_a:
-                move_left = False
+                Jogador.speedx += 23
             if event.key == pygame.K_d:
-                move_right == False
+                Jogador.speedx -= 23
+            if event.key == pygame.K_s:
+                Jogador.speedy -= 23
+            if event.key == pygame.K_w:
+                Jogador.speedy += 23
+                
                 
     all_sprites.update()
     colisao = pygame.sprite.spritecollide(Jogador, all_inimigos,True)
