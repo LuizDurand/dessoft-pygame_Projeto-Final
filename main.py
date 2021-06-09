@@ -63,7 +63,7 @@ icone = pygame.image.load('ninja pixel.png')
 pygame.display.set_icon(icone)
 
 #Carrega os sons do jogo:
-pygame.mixer.music.load('CP-Dojo.mp3')
+pygame.mixer.music.load('DojoMusic.mp3')
 pygame.mixer.music.set_volume(0.3)
 assets['cut_sound'] = pygame.mixer.Sound('cutsound.mp3')
 
@@ -256,12 +256,12 @@ while game:
     colisao_com_tronco = pygame.sprite.spritecollide(Jogador, all_tocos,True)
     for Toco_De_Madeira in colisao_com_tronco:
         assets['cut_sound'].play()
-        u = Toco_De_Madeira(assets)
+        u = toco_de_madeira(assets)
         all_sprites.add(u)
         all_tocos.add(u)
-    if len(colisao_com_tronco) > 0:
         animacao_corte = alimento_cortado(Ninjas.rect.center, assets)
         all_sprites.add(animacao_corte)
+    if len(colisao_com_tronco) > 0:
         vidas -= 1 # se o jogador colidir com o tronco, contador vidas -= 1
         if vidas == 0:
             Jogador.kill() # se vidas chegar a 0 jogador morre
@@ -288,14 +288,9 @@ while game:
     #Desenha os Streaks:
     text_surface = assets['Fonte_Placar'].render("{:03d}".format(streak), True, (102,0,102))
     text_rect = text_surface.get_rect()
-    text_rect.lefttop = (840, 10)
+    text_rect.topright = (840, 10)
     janela.blit(text_surface,text_rect)
 
 
 #Função que termina o pygame:    
 pygame.quit()
-
-# arrumar imagens png
-# musica?
-# funcao que adiciona as animacoes
-# linha 255
